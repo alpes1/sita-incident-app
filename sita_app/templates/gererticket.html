@@ -1,0 +1,171 @@
+{% extends 'sidebar.html' %}
+{% block content %}
+
+<br>
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <h5>
+                <a href="{% url 'creationticket' %}" class="btn btn-link float-end">
+                    Ajouter un Ticket
+                </a>
+                Tickets
+            </h5>
+                <table class="table table-stripped table-bordered">
+                    <tr>
+                        <th>site</th>
+                        <th>compagnie</th>
+                        <th>equipement</th>
+                        <th>type d'inci</th>
+                        <th>type d'interv</th>
+                        <th>nature d'interv</th>
+                        <th>type de commun</th>
+                        <th>problem</th>
+                        <th>zone</th>
+                        <th>Etat</th>
+                        <th>update</th>
+                        <th>delete</th>
+                    </tr>
+                    {% for tick in Tickets  %}
+                    <tr>
+                        <td>{{tick.site}}</td>
+                        <td>{{tick.compagnie}}</td>
+                        <td>{{tick.zone}}</td>
+                        <td>{{tick.equipement}}</td>
+                        <td>{{tick.type}}</td>
+                        <td>{{tick.type_intervention}}</td>
+                        <td>{{tick.nature_int}}</td>
+                        <td>{{tick.probleme}}</td>
+                        <td>{{tick.zone}}</td>
+                        <td>
+                            {% if tick.etat == 'f'  %} 
+                                <a class="btn btn-sm btn-danger" onclick="updateTicket('{{ tick.id_ticket }}')" >
+                                    Fermer
+                                </a>
+                                {% else %}
+                                <a class="btn btn-sm btn-success" onclick="updateTicketOuvert('{{ tick.id_ticket }}')" >
+                                    Ouvert
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td><a class="btn btn-sm btn-primary" href="{% url 'updateTicket' tick.id_ticket %}">Update</a></td>
+                        <td><a  class="btn btn-sm btn-danger" href="">delete</a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modal_completer_creation" tabindex="-1" role="dialog" aria-labelledby="modal_completer_creationTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Upadate Ticket</h5>
+        <a type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </a>
+    </div>
+    <div class="modal-body">
+        
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="problem_short_update_field"> Probleme </label>
+                    <select id="problem_short_update_field" class="form-control" >
+                        <option value="problem1">   
+                            problem1
+                        </option>
+                        <option value="problem2">   
+                            problem2
+                        </option>
+                        <option value="problem3">   
+                            problem3
+                        </option>
+                        <option value="problem4">   
+                            problem4
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="solution_short_update_field"> Solution </label>
+                    <textarea type="text" id="solution_short_update_field" class="form-control" ></textarea>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="updateTicketWithDetails()" >Save changes</button>
+    </div>
+    </div>
+</div>
+</div>
+
+
+
+<script>
+var currentlyUpdatingTicket = null ;
+
+function updateTicket(id){
+    var  fd = new FormData();
+    
+    fd.append('csrfmiddlewaretoken',"{{ csrf_token }}");
+    fd.append('action','o');
+    fd.append('id',id);
+
+    $.ajax({
+        url: '/tickets/update-short',
+        method:'POST',
+        data:fd,
+        processData: false, 
+        contentType: false,
+        success:function (res) {
+            location.reload();
+        },
+        error:function (res) {
+            
+        }
+    })
+}
+
+function updateTicketOuvert(id){
+    $("#solution_short_update_field").val('');
+    $("#problem_short_update_field").val('');
+    currentlyUpdatingTicket = id ;
+    $("#modal_completer_creation").modal('show');
+}
+
+function updateTicketWithDetails(){
+    
+    var  fd = new FormData();
+    
+    fd.append('csrfmiddlewaretoken',"{{ csrf_token }}");
+    fd.append('action','f');
+    fd.append('id',currentlyUpdatingTicket);
+    fd.append('solution',$("#solution_short_update_field").val());
+    fd.append('probleme',$("#problem_short_update_field").val());
+
+    $.ajax({
+        url: '/tickets/update-short',
+        method:'POST',
+        data:fd,
+        processData: false, 
+        contentType: false,
+        success:function (res) {
+            location.reload();
+        },
+        error:function (res) {
+            
+        }
+    });
+}
+
+
+</script>
+{% endblock %}

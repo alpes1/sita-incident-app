@@ -1,0 +1,137 @@
+{% extends 'sidebar.html' %}
+{% block content %}
+
+<div class="row"> 
+    <div class="col-12 col-md-4" >
+        <div class=" h2 bd-callout bd-callout-info">
+            Ticket ouvert <br>{{nbr_ouvert}}
+
+        </div>
+
+    </div>
+    <div class="col-12 col-md-4" >
+        <div class="h2 bd-callout bd-callout-warning">
+            Ticket ferme <br>{{nbr_ferme}}
+            
+        </div>
+
+    </div>
+    <div class="col-12 col-md-4" >
+        <div class=" h2 card bd-callout bd-callout-danger">
+            Ticket annule <br> {{nbr_annule}}
+        </div>
+
+    </div>
+
+
+
+
+        
+    <div class="col-12 col-md-6">
+        <div class=" h2 card bd-callout">
+            <canvas id="moisChart"></canvas>
+        </div>
+    </div>
+    <div class="col-12 col-md-6">
+        <div class=" h2 card bd-callout">
+            <canvas id="repartitionChart"></canvas>
+        </div>
+    </div>
+
+
+
+</div>
+<script src="/static/js/Chart-js.min.js" ></script>
+<script>
+
+  new Chart(
+    document.getElementById('repartitionChart'),
+    {
+      type: 'pie',
+      data: {
+        labels: [ 
+            {% for probleme in problemes %}
+                "{{ probleme.probleme }}" ,
+            {% endfor %}
+        ] ,
+        datasets: [
+          {
+            label: 'Acquisitions by year',
+            data:[
+                {% for probleme in problemes %}
+                    {{ probleme.nbr }} ,
+                {% endfor %}
+            ],
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)',
+                'rgb(255, 205, 86)',
+                'rgb( 76, 187, 23)'
+            ]
+          }
+        ]
+      }
+    }
+  );
+  var labels= ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  new Chart(
+    document.getElementById('moisChart'),
+    {
+        type: 'bar',
+        options: {
+            scales: {
+                yAxes: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0, // Display integer values only
+                    }
+                }
+            },
+        },
+        data: {
+            labels:labels ,
+            datasets: [
+            {
+                label: 'Tickets par annee',
+                data:[
+                    {% for month in months %}
+                        "{{ month }}" ,
+                    {% endfor %}
+                ],
+                backgroundColor: [
+                    'rgb(205, 152, 94)  ',
+                    'rgba(75, 192, 192) ',
+                    'rgb(20, 20, 140)   ',
+                    'rgb(201, 20, 140   ',
+                    'rgb(70, 20, 140)   ',
+                    'rgb(192, 202, 76)  ',
+                    'rgb(214, 159, 161) ',
+                    'rgb(236, 228, 205) ',
+                    'rgb(52, 228, 205)  ',
+                    'rgb(128, 82, 47)   ',
+                    'rgba(255, 99, 132) ',
+                    'rgb(55, 169, 47)   ',
+                ],
+                borderColor:[
+                    'rgb(205, 152, 94 , 0.2)  ',
+                    'rgba(75, 192, 192 , 0.2) ',
+                    'rgb(20, 20, 140 , 0.2)   ',
+                    'rgb(201, 20, 140 , 0.2   ',
+                    'rgb(70, 20, 140 , 0.2)   ',
+                    'rgb(192, 202, 76 , 0.2)  ',
+                    'rgb(214, 159, 161 , 0.2) ',
+                    'rgb(236, 228, 205 , 0.2) ',
+                    'rgb(52, 228, 205 , 0.2)  ',
+                    'rgb(128, 82, 47 , 0.2)   ',
+                    'rgba(255, 99, 132 , 0.2) ',
+                    'rgb(55, 169, 47 , 0.2)   ',
+                ],
+                borderWidth: 1
+            }
+            ]
+        }
+    }
+  );
+</script>
+{% endblock %}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static '/css/boostrap.css' %}">
+    <link rel="stylesheet" href="{% static '/css/sidebar.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Dashboard</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<body>
+    <div class="main-content-body "> {% block content %}  {% endblock %} </div>
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img class="logo"src="{% static '/image/sitaLogo.png' %}" alt="logo">
+                </span>
+            </div>
+            <i class='bx bxs-chevrons-right toggle '></i> 
+        </header>
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links"style="padding:0px">
+
+                    <li class="nav-link">
+                        <a href="{% url 'acceuil'%}">
+                            <i class='bx bx-home-alt icon' ></i>
+                            <span class="text nav-text">Acceuil</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bxs-doughnut-chart icon'></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="{% url 'gererticket' %}">
+                            <i class='bx bxs-coupon icon'></i>
+                            <span class="text nav-text" >Gerer les tickets</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="{% url 'gestioncomposants' %}">
+                            <i class='bx bxs-edit icon ' ></i>
+                            <span class="text nav-text">Gestion des composants</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bxs-user-plus icon' ></i>
+                            <span class="text nav-text">Gestion d'utilisateurs</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <script src="{% static 'js/boostrap.js' %}"></script>
+    <script src="{% static 'js/sidebar.js' %}"></script>
+
+  
+</body>
+</html>

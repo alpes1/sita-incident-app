@@ -1,0 +1,57 @@
+{% extends 'sidebar.html' %}
+{% load static %}
+{% block content %}
+<h1> {{ title }}  </h1>
+
+
+<form action="{% url 'add_ticket' %}" method="post" id="add_ticket_form"class="row">
+    {% csrf_token %}
+    {% for field in form %}
+    
+    <div class="col-12 col-md-4" >&nbsp;    </div>
+    <div class="col-12 col-md-4">    
+        <div class="form-group {% if  field.id_for_label  == 'id_closed_at' or field.id_for_label  == 'id_probleme' or field.id_for_label  == 'id_solution'  %} d-none {% endif %} "  {% if  field.id_for_label  == 'id_closed_at' %} id="date_fermeture"  {% endif %} >
+            
+            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+            {{ field }}
+            <br><br>
+        </div>
+    </div>
+    <div class="col-12 col-md-4" >&nbsp;    </div>
+    {% endfor %}
+    <div class="col-12 col-md-4" >&nbsp;    </div>
+    <div class="col-12 col-md-4" >
+            <input type="submit" class="btn btn-primary float-end"> 
+            
+    </div>
+
+    <div class="col-12 col-md-4" >&nbsp;    </div>
+</form>
+<script> 
+
+for (const input of $("#add_ticket_form input:not([type=button]):not([type=submit]) ,#add_ticket_form select  , #add_ticket_form  textarea") ) {
+    $(input).addClass("form-control");
+    if($(input).parent().hasClass('d-none')){
+        $(input).removeAttr('required');
+    }
+}
+
+$('#id_etat').on('change',function (e) {
+    if($('#id_etat').val() == "f"){
+        $("#date_fermeture").removeClass("d-none");
+    }   
+    else{
+        $("#date_fermeture").addClass("d-none");
+    }
+});
+
+$('#id_etat').trigger("change");
+
+$("#id_closed_at").prop("type","datetime-local");
+
+</script>
+{% endblock %}
+
+
+
